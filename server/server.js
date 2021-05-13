@@ -1,7 +1,11 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const FriendModel = require('./models/Friends')
+const FriendModel = require('./models/Friends');
+const cors = require('cors')
+
+app.use(cors()) // to allow cross origin connections
+app.use(express.json()); // to be able to get json in the backend
 
 const port = process.env.PORT || 3001
 
@@ -16,10 +20,16 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
 })
 
 // ADD DATA
-app.get('/insert', async (req, res) => {
-    const friend = new FriendModel({ name: "Jaime", age: 28, description: "Tall and handsome" });
-    await friend.save()
-    res.send("Inserted Data")
+app.post('/addfriend', async (req, res) => {
+    const name = req.body.name; // to access the bodydata on the axios post
+    const age = req.body.age;
+
+    const friend = new FriendModel({ name: name, age: age });
+  try {
+      await friend.save()
+  } catch (error) {
+      console.log(error)
+  }
 })
 
 // READ DATA
