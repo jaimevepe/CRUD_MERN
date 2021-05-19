@@ -24,7 +24,6 @@ app.post('/addfriend', async (req, res) => {
     const name = req.body.name; // to access the bodydata on the axios post
     const age = req.body.age;
     const description = req.body.description;
-
     const friend = new FriendModel({ name: name, age: age, description: description });
     try {
         await friend.save()
